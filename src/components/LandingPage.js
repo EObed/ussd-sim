@@ -1,16 +1,38 @@
 import React, { useState, useEffect } from "react";
 
+
 const LandingPage = () => {
-  //Initial array of objects to be obtained from the form
-  const [storedData, setStoredData] = useState([]);
-  const [formData, setFormData] = useState(
-    {
+     //Initial array of objects to be obtained from the form
+     const [storedData, setStoredData] = useState([]);
+     const [formData, setFormData] = useState(
+       {
+         ussdCode: "",
+         ussdUrl: "",
+         phoneNumber: "",
+         networkName: "",
+       },
+     );
+
+
+      //Adds the USSD code to the array after the submit button has been clicked
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const newData = { ...formData, id: Date.now() }; // Add an "id" property
+    setStoredData([...storedData, newData]);
+    
+
+    //stores the formData to the local browser storage
+    localStorage.setItem("ussdCodes", JSON.stringify([...storedData,newData]));
+
+    setFormData({
+
       ussdCode: "",
       ussdUrl: "",
       phoneNumber: "",
       networkName: "",
-    },
-  );
+    });
+  };
 
   //State for update mode
   const [updateMode, setUpdateMode] = useState(false)
@@ -33,25 +55,7 @@ const LandingPage = () => {
     }));
   };
 
-  //Adds the USSD code to the array after the submit button has been clicked
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const newData = { ...formData, id: Date.now() }; // Add an "id" property
-    setStoredData([...storedData, newData]);
-    
-
-    //stores the formData to the local browser storage
-    localStorage.setItem("ussdCodes", JSON.stringify([...storedData,newData]));
-
-    setFormData({
-
-      ussdCode: "",
-      ussdUrl: "",
-      phoneNumber: "",
-      networkName: "",
-    });
-  };
+ 
 
   const handleDelete = (itemToDelete) => {
     const updatedData = storedData.filter(item => item.id !== itemToDelete.id);
@@ -61,8 +65,12 @@ const LandingPage = () => {
   };
 
 //update mode functionality
-const toggleUpdateMode = () => {
-  setUpdateMode(updateMode);
+const toggleUpdateMode = (passedID) => {
+  setUpdateMode(true);
+ 
+  JSON.parse(localStorage.getItem("ussdCodes"));
+
+
 };
 
 
@@ -74,12 +82,62 @@ const toggleUpdateMode = () => {
         <div className="w-[500px] h-[500px]  border-[3px] flex flex-col items-center">
           <div className="p-3 font-bold text-xl">Add new USSD</div>
           <div className="w-[400px] h-[430px] border-2 flex flex-col">
-            <form onSubmit={handleSubmit} class="p-2 flex flex-col ">
+            {!updateMode ? (
+                  <form onSubmit={handleSubmit} class="p-2 flex flex-col ">
+                  <div className="p-1">
+                    <div className="">Enter USSD code:</div>
+                    <input
+                      name="ussdCode"
+                      value={formData.ussdCode}
+                      onChange={handleChange}
+                      class="required: w-[260px]  border-2 rounded border-black py-1 px-1"
+                    />
+                  </div>
+                  <div className="p-1">
+                    <div className="">Enter USSD URL:</div>
+                    <input
+                      name="ussdUrl"
+                      value={formData.ussdUrl}
+                      onChange={handleChange}
+                      class="required: w-[260px] border-2 rounded border-black py-1 px-1"
+                    />
+                  </div>
+                  <div className="p-1">
+                    <div className="">Enter Phone Number:</div>
+                    <input
+                      name="phoneNumber"
+                      value={formData.phoneNumber}
+                      onChange={handleChange}
+                      class="required: w-[260px] border-2 rounded border-black py-1 px-1"
+                    />
+                  </div>
+                  <div className="p-1">
+                    <div className="">Enter Network Name:</div>
+                    <input
+                      name="networkName"
+                      value={formData.networkName}
+                      onChange={handleChange}
+                      class="required: w-[260px] border-2 rounded border-black py-1 px-1"
+                    />
+                  </div>
+                  <div className=" w-full items-center text-center p-3">
+                    <button
+                      class="items-center border-solid bg-blue-400 text-white h-[50px] w-[80px] rounded hover:bg-blue-800"
+                      type="submit"
+                    >
+                      Add USSD
+                    </button>
+                  </div>
+                  {console.log(storedData)}
+                </form>
+                  
+            ): (
+              <form  class="p-2 flex flex-col ">
               <div className="p-1">
                 <div className="">Enter USSD code:</div>
                 <input
                   name="ussdCode"
-                  value={formData.ussdCode}
+                  
                   onChange={handleChange}
                   class="required: w-[260px]  border-2 rounded border-black py-1 px-1"
                 />
@@ -88,7 +146,7 @@ const toggleUpdateMode = () => {
                 <div className="">Enter USSD URL:</div>
                 <input
                   name="ussdUrl"
-                  value={formData.ussdUrl}
+                  
                   onChange={handleChange}
                   class="required: w-[260px] border-2 rounded border-black py-1 px-1"
                 />
@@ -97,7 +155,7 @@ const toggleUpdateMode = () => {
                 <div className="">Enter Phone Number:</div>
                 <input
                   name="phoneNumber"
-                  value={formData.phoneNumber}
+                 
                   onChange={handleChange}
                   class="required: w-[260px] border-2 rounded border-black py-1 px-1"
                 />
@@ -106,21 +164,30 @@ const toggleUpdateMode = () => {
                 <div className="">Enter Network Name:</div>
                 <input
                   name="networkName"
-                  value={formData.networkName}
+                 
                   onChange={handleChange}
                   class="required: w-[260px] border-2 rounded border-black py-1 px-1"
                 />
               </div>
-              <div className=" w-full items-center text-center p-3">
+              <div className=" flex justify-between w-full items-center text-center p-3">
                 <button
                   class="items-center border-solid bg-blue-400 text-white h-[50px] w-[80px] rounded hover:bg-blue-800"
                   type="submit"
                 >
-                  Add USSD
+                  Update
+                </button>
+                <button
+                  onClick={toggleUpdateMode}
+                  class="items-center border-solid bg-blue-400 text-white h-[50px] w-[80px] rounded hover:bg-blue-800"
+                  type="submit"
+                >
+                  Cancel
                 </button>
               </div>
               {console.log(storedData)}
             </form>
+            )}
+            
           </div>
         </div>
         <div className="w-[500px] h-[500px] border-[3px] flex flex-col items-center">
@@ -142,7 +209,7 @@ const toggleUpdateMode = () => {
                     </ul>
                   </div>
                   <div className="w-auto flex justify-between p-1">
-                    <button onClick={toggleUpdateMode} className="items-center border-solid bg-blue-400 text-white h-[30px] w-[40px] rounded hover:bg-blue-800">
+                    <button onClick={()=>toggleUpdateMode(data.id)} className="items-center border-solid bg-blue-400 text-white h-[30px] w-[40px] rounded hover:bg-blue-800">
                       Edit
                     </button>
                     <button className="items-center border-solid bg-blue-400 text-white h-[30px] w-[40px] rounded hover:bg-blue-800">

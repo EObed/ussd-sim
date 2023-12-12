@@ -211,12 +211,12 @@ const LandingPage = () => {
 
     const [testMode, setTestMode] = useState(false)
     const handleTestMode =() => {
-      setTestMode(true)
-      console.log(setTestMode)
-
+      setTestMode(true)  
     }
 
-
+    const cancelCallbackFunc = () => {
+        setTestMode(false)
+    }
 
 
 
@@ -393,7 +393,7 @@ const LandingPage = () => {
       <div>
       {
         testMode ?  (<div className=" absolute top-0 left-0 w-screen h-screen bg-black/60 z-50">
-        <div className="flex items-center justify-center w-full p-2"><TestMode /></div>
+        <div className="flex items-center justify-center w-full p-2"><TestMode cancelCallbackFunc={cancelCallbackFunc}/></div>
       </div>) : (<></>)
       } 
       </div>

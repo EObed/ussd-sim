@@ -22,18 +22,25 @@ const LandingPage = () => {
     const validationErrors = {}
     if (!formData.ussdCode.trim() ){
       validationErrors.ussdCode = "USSD code is required*"
-    } 
+    } else if (!/^\*\d+#$/.test(formData.ussdCode)){
+      validationErrors.ussdCode = "Invalid USSD code*"
+    }
       
     if (!formData.ussdUrl.trim() ){
       validationErrors.ussdUrl = "USSD URL is required*"
+    } else if (!/^(?:(ftp|http|https):\/\/)?[^ "]+$/.test(formData.ussdUrl)){
+      validationErrors.ussdUrl = "Enter valid URL*"
     }
     if (!formData.phoneNumber.trim() ){
       validationErrors.phoneNumber = "Phone number is required*"
-    }else if (typeof(formData.phoneNumber)!= "string"){
+    }else if (!/^(024|054|055|059|050|026|057|027)\d{7}$/.test(formData.phoneNumber)
+    ){
       validationErrors.phoneNumber = "Enter valid phone number*"
-    }
+    } 
     if (!formData.networkName.trim() ){
       validationErrors.networkName = "Network is required*"
+    }else if (!/^(MTN|Vodafone|AirtelTigo)$/.test(formData.networkName)){
+      validationErrors.networkName = "Enter correct network"
     }
     
     setErrors(validationErrors)

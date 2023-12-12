@@ -210,13 +210,39 @@ const LandingPage = () => {
 
 
     const [testMode, setTestMode] = useState(false)
-    const handleTestMode =() => {
+    const handleTestMode =(passedTestID) => {
       setTestMode(true)  
+
+      const testcodes = JSON.parse(localStorage.getItem("ussdCodes"))
+      const testData = testcodes.find((testobj) => testobj.id === passedTestID)
+
+      setTestFormData(testData)
+
     }
 
+
+    //Callback function for cancelling when in Test mode
     const cancelCallbackFunc = () => {
         setTestMode(false)
     }
+
+    const [testFormData, setTestFormData] = useState({
+      ussdCode: '',  
+      ussdUrl: '',
+      phoneNumber: '',
+      networkName: ''  
+    })
+
+    //Callback function for sending the data to the the testmode input 
+    const sendDataFunc = (testData) => {
+
+    }
+
+
+  
+
+
+
 
 
 
@@ -393,7 +419,7 @@ const LandingPage = () => {
       <div>
       {
         testMode ?  (<div className=" absolute top-0 left-0 w-screen h-screen bg-black/60 z-50">
-        <div className="flex items-center justify-center w-full p-2"><TestMode cancelCallbackFunc={cancelCallbackFunc}/></div>
+        <div className="flex items-center justify-center w-full p-2"><TestMode cancelCallbackFunc={cancelCallbackFunc} testFormData={testFormData} sendDataFunc={sendDataFunc}/></div>
       </div>) : (<></>)
       } 
       </div>

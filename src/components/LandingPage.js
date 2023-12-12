@@ -230,7 +230,8 @@ const LandingPage = () => {
       ussdCode: '',  
       ussdUrl: '',
       phoneNumber: '',
-      networkName: ''  
+      networkName: '',
+        
     })
 
     //Callback function for sending the data to the the testmode input 

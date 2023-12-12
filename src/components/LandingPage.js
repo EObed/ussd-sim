@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import TestMode from "./TestMode";
 
 const LandingPage = () => {
   //Initial array of objects to be obtained from the form
@@ -142,10 +143,42 @@ const LandingPage = () => {
     //   setUpdateMode(false);
     // }
   
+
+    //updating functionality
     const handleUpdate = (e) => {
       e.preventDefault()
       const filteredData = storedData.filter(data => data.id !== formData.passedID); 
     setStoredData([...filteredData,formData]);
+
+    //update form validation
+    const validationErrors = {}
+    if (!formData.ussdCode.trim() ){
+      validationErrors.ussdCode = "USSD code is required*"
+    } else if (!/^\*\d+#$/.test(formData.ussdCode)){
+      validationErrors.ussdCode = "Invalid USSD code*"
+    }
+      
+    if (!formData.ussdUrl.trim() ){
+      validationErrors.ussdUrl = "USSD URL is required*"
+    } else if (!/^(?:(ftp|http|https):\/\/)?[^ "]+$/.test(formData.ussdUrl)){
+      validationErrors.ussdUrl = "Enter valid URL*"
+    }
+    if (!formData.phoneNumber.trim() ){
+      validationErrors.phoneNumber = "Phone number is required*"
+    }else if (!/^(024|054|055|059|050|026|057|027)\d{7}$/.test(formData.phoneNumber)
+    ){
+      validationErrors.phoneNumber = "Enter valid phone number*"
+    } 
+    if (!formData.networkName.trim() ){
+      validationErrors.networkName = "Network is required*"
+    }else if (!/^(MTN|Vodafone|AirtelTigo)$/.test(formData.networkName)){
+      validationErrors.networkName = "Enter correct network"
+    }
+    
+    setErrors(validationErrors)
+    
+    if (Object.keys(validationErrors).length ===0) {
+
 
     //stores the formData to the local browser storage
     localStorage.setItem("ussdCodes", JSON.stringify([...filteredData, formData]));
@@ -159,12 +192,27 @@ const LandingPage = () => {
 
     setUpdateMode(false)
     }
+  }
 
 
-    const [testMode, setTestMode] = useState()
+    //Cancelling functionality
+    const handleCancel = () => {
+      setUpdateMode(false)
+
+      setFormData({
+        ussdCode: "",
+        ussdUrl: "",
+        phoneNumber: "",
+        networkName: "",
+      });
+    }
+   
+
+
+    const [testMode, setTestMode] = useState(false)
     const handleTestMode =() => {
-      setTestMode(testMode)
-
+      setTestMode(true)
+      console.log(setTestMode)
 
     }
 
@@ -177,9 +225,10 @@ const LandingPage = () => {
   return (
     <div className="flex items-center w-screen h-full text-center flex-col">
       <div className=" font-bold text-3xl p-3">USSD Simulator</div>
+      
       <div className="p-5 flex w-auto h-full items-center">
         <div className="w-[500px] h-[500px]  border-[3px] flex flex-col items-center">
-          {}
+          
           <div className="p-3 font-bold text-xl">Add new USSD</div>
           <div className="w-[400px] h-[430px] border-2 flex flex-col">
             {!updateMode ? (
@@ -245,7 +294,7 @@ const LandingPage = () => {
                     value={formData.ussdCode}
                     onChange={handleChange}
                     className="required: w-[260px]  border-2 rounded border-black py-1 px-1"
-                  />
+                  /> <div className="text-[red]"> {errors.ussdCode && <span>{errors.ussdCode}</span>}</div>
                 </div>
                 <div className="p-1">
                   <div className="">Enter USSD URL:</div>
@@ -254,7 +303,7 @@ const LandingPage = () => {
                     value={formData.ussdUrl}
                     onChange={handleChange}
                     className="required: w-[260px] border-2 rounded border-black py-1 px-1"
-                  />
+                  /> <div className="text-[red]">{errors.ussdUrl && <span>{errors.ussdUrl}</span>}</div>
                 </div>
                 <div className="p-1">
                   <div className="">Enter Phone Number:</div>
@@ -263,7 +312,7 @@ const LandingPage = () => {
                     value={formData.phoneNumber}
                     onChange={handleChange}
                     className="required: w-[260px] border-2 rounded border-black py-1 px-1"
-                  />
+                  /> <div className="text-[red]"> {errors.phoneNumber && <span>{errors.phoneNumber}</span>}</div>
                 </div>
                 <div className="p-1">
                   <div className="">Enter Network Name:</div>
@@ -272,8 +321,8 @@ const LandingPage = () => {
                     value={formData.networkName}
                     onChange={handleChange}
                     className="required: w-[260px] border-2 rounded border-black py-1 px-1"
-                  />
-                </div>
+                  /> <div className="text-[red]"> {errors.networkName && <span>{errors.networkName}</span>} </div>
+                </div> 
                 <div className=" flex justify-between w-full items-center text-center p-3">
                   <button
                     
@@ -285,7 +334,7 @@ const LandingPage = () => {
                   <button
                    
                     className="items-center border-solid bg-blue-400 text-white h-[50px] w-[80px] rounded hover:bg-blue-800"
-                    onClick={() => setUpdateMode(false)}
+                    onClick={handleCancel}
                   >
                     Cancel
                   </button>
@@ -341,6 +390,15 @@ const LandingPage = () => {
           </div>
         </div>
       </div>
+      <div>
+      {
+        testMode ?  (<div className=" absolute top-0 left-0 w-screen h-screen bg-black/60 z-50">
+        <div className="flex items-center justify-center w-full p-2"><TestMode /></div>
+      </div>) : (<></>)
+      } 
+      </div>
+      
+      
     </div>
   );
 };

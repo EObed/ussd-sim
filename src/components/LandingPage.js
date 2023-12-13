@@ -208,15 +208,16 @@ const LandingPage = () => {
     }
    
 
-
+    //testing mode functionality
     const [testMode, setTestMode] = useState(false)
     const handleTestMode =(passedTestID) => {
       setTestMode(true)  
 
       const testcodes = JSON.parse(localStorage.getItem("ussdCodes"))
       const testData = testcodes.find((testobj) => testobj.id === passedTestID)
-
-      setTestFormData(testData)
+       const newTestData = {...testData, seshID: Date.now()}
+      // const newData = { ...formData, id: Date.now() };
+      setTestFormData(newTestData)
 
     }
 
@@ -231,11 +232,11 @@ const LandingPage = () => {
       ussdUrl: '',
       phoneNumber: '',
       networkName: '',
-        
+      sessionID: ''
     })
 
     //Callback function for sending the data to the the testmode input 
-    const sendDataFunc = (testData) => {
+    const sendDataFunc = (newTestData) => {
 
     }
 

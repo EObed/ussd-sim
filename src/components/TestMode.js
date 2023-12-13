@@ -2,12 +2,39 @@ import React from "react";
 
 const TestMode = ({cancelCallbackFunc, sendDataFunc, testFormData}) => {
 
+
+  let messageType = true
+
+  const dataToBeTested = {
+    USERID: "Spectrum", 
+    MSISDN: testFormData.phoneNumber,
+    SESSIONID: testFormData.seshID,
+    NETWORK: testFormData.networkName,
+    MSGTYPE: messageType,
+    USERDATA: "1"
+  }
+
+  
+
   const cancelClick = () => {
     cancelCallbackFunc()
   }
 
+  const url = testFormData.ussdUrl
+
+  fetch(url, {
+    method: "POST",
+    body: dataToBeTested,
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  }).then((response) => response.text());
 
 
+  
+
+
+  
 
   return (
     <div className="flex flex-col">

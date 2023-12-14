@@ -68,11 +68,29 @@ const TestMode = ({ cancelCallbackFunc, sendDataFunc, testFormData, randomNumber
   
   };
 
+   // Split the response into an array of lines
+   const lines = respMsg.split('\n');
+
+
   return (
     <div className="flex flex-col">
       <div className="w-[400px] h-[400px] border-[3px] p-2 flex text-center items-center justify-between text-white">
+        <div>
         {isLoading &&   <div> USSD loading</div>}
-        <p>{respMsg}</p>
+        <p>      {lines.map((line, index) => (
+        // Use <p> for each line or <br> between lines
+        <React.Fragment key={index}>
+          {line}
+          {index < lines.length - 1 && <br />} {/* Add <br> except for the last line */}
+        </React.Fragment>
+      ))}</p>
+        </div>
+        
+        <div>
+
+    </div>
+
+
       </div>
       <div className="flex flex-col p-4 w-auto justify-between">
         <div>

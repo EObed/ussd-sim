@@ -10,8 +10,9 @@ const TestMode = ({ cancelCallbackFunc, sendDataFunc, testFormData, randomNumber
     cancelCallbackFunc();
   };
 
+ 
   const [userData, setUserData] = useState(testFormData.ussdCode);
-
+  
   const handleInputChange = (event) => {
     setUserData(event.target.value);
   };
@@ -20,6 +21,7 @@ const TestMode = ({ cancelCallbackFunc, sendDataFunc, testFormData, randomNumber
 
   const handleSendClick = () => {
    
+
 
     let messageType = true;
 
@@ -51,6 +53,7 @@ const TestMode = ({ cancelCallbackFunc, sendDataFunc, testFormData, randomNumber
       .then((response) => (resp = response.json()))
       .then((resp) => {
         setRespMsg(resp.MSG); // Update the response in the state
+        setUserData('')
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -67,12 +70,12 @@ const TestMode = ({ cancelCallbackFunc, sendDataFunc, testFormData, randomNumber
       </div>
       <div className="flex flex-col p-4 w-auto justify-between">
         <div>
-          {" "}
+         
           <input
             value={userData}
             onChange={handleInputChange}
             className="border-2 border-black text-black p-1 w-[350px] "
-          />{" "}
+          />
         </div>
         <div className="flex w-auto justify-between p-3">
           <button

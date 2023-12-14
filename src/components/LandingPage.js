@@ -93,8 +93,8 @@ const LandingPage = () => {
     // localStorage.removeItem(newData);
     localStorage.setItem("ussdCodes", JSON.stringify(newData));
     // setStoredData();
-    console.log(storedData);
-    console.log(newData);
+    // console.log(storedData);
+    // console.log(newData);
   };
 
   //update mode functionality

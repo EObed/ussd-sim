@@ -5,6 +5,8 @@ import React, { useState } from "react";
 
 const TestMode = ({ cancelCallbackFunc, sendDataFunc, testFormData, randomNumber }) => {
   const [respMsg, setRespMsg] = useState("");
+
+  const [isLoading, setIsLoading] = useState(false)
   
   const cancelClick = () => {
     cancelCallbackFunc();
@@ -17,19 +19,20 @@ const TestMode = ({ cancelCallbackFunc, sendDataFunc, testFormData, randomNumber
     setUserData(event.target.value);
   };
 
- 
-
+  const dialNum = testFormData.phoneNumber.toString()
+  const dialNum1 =  dialNum.slice(1)
+  const dialNum2 = "233"+dialNum1
   const handleSendClick = () => {
    
-
+    setIsLoading(true)
 
     let messageType = true;
 
     const dataToBeTested = {
       USERID: "Spectrum",
-      MSISDN: "233249621938",
+      MSISDN: dialNum2,
       SESSIONID: randomNumber.toString(),
-      NETWORK: "MTN",
+      NETWORK: testFormData.networkName.toString(),
       MSGTYPE: messageType,
       USERDATA: userData.toString(),
     };
@@ -37,7 +40,7 @@ const TestMode = ({ cancelCallbackFunc, sendDataFunc, testFormData, randomNumber
     const jsonData = JSON.stringify(dataToBeTested);
 
     // console.log(messageType);
-    // console.log(userData);
+    console.log(userData);
     // console.log(randomNumber);
 
     const url = "https://test-nedco-mobile.bsl.com.gh/api/ussd/v1";
@@ -58,6 +61,8 @@ const TestMode = ({ cancelCallbackFunc, sendDataFunc, testFormData, randomNumber
       .catch((error) => {
         console.error("Error fetching data:", error);
         setRespMsg("Error occurred while fetching data.");
+      }).finally(() => {
+        setIsLoading(false); // Reset loading state whether the API call succeeds or fails
       });
 
   
@@ -65,7 +70,8 @@ const TestMode = ({ cancelCallbackFunc, sendDataFunc, testFormData, randomNumber
 
   return (
     <div className="flex flex-col">
-      <div className="w-[400px] h-[400px] border-[3px] p-2 flex items-center justify-between text-white">
+      <div className="w-[400px] h-[400px] border-[3px] p-2 flex text-center items-center justify-between text-white">
+        {isLoading &&   <div> USSD loading</div>}
         <p>{respMsg}</p>
       </div>
       <div className="flex flex-col p-4 w-auto justify-between">

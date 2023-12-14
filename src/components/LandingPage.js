@@ -11,6 +11,8 @@ const LandingPage = () => {
     networkName: "",
   });
 
+  //random number
+  const [randomNumber, setRandomNumber] = useState(null);
 
   //Form validation
   const [errors, setErrors] = useState({})
@@ -208,10 +210,19 @@ const LandingPage = () => {
     }
    
 
+  
     //testing mode functionality
     const [testMode, setTestMode] = useState(false)
     const handleTestMode =(passedTestID) => {
       setTestMode(true)  
+
+      const generateRandomnumber = () => {
+        return Math.floor(Math.random() * 999999999 - 1);
+      }
+      
+      let val1 = generateRandomnumber();
+      setRandomNumber(val1)
+    
 
       const testcodes = JSON.parse(localStorage.getItem("ussdCodes"))
       const testData = testcodes.find((testobj) => testobj.id === passedTestID)
@@ -421,7 +432,7 @@ const LandingPage = () => {
       <div>
       {
         testMode ?  (<div className=" absolute top-0 left-0 w-screen h-screen bg-black/60 z-50">
-        <div className="flex items-center justify-center w-full p-2"><TestMode cancelCallbackFunc={cancelCallbackFunc} testFormData={testFormData} sendDataFunc={sendDataFunc}/></div>
+        <div className="flex items-center justify-center w-full p-2"><TestMode cancelCallbackFunc={cancelCallbackFunc} testFormData={testFormData} sendDataFunc={sendDataFunc} randomNumber={randomNumber}/></div>
       </div>) : (<></>)
       } 
       </div>

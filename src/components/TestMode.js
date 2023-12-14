@@ -23,8 +23,7 @@ const TestMode = ({ cancelCallbackFunc, sendDataFunc, testFormData, randomNumber
   const dialNum1 =  dialNum.slice(1)
   const dialNum2 = "233"+dialNum1
   const handleSendClick = () => {
-   
-    setIsLoading(true)
+   setIsLoading(true)
 
     let messageType = true;
 
@@ -74,16 +73,16 @@ const TestMode = ({ cancelCallbackFunc, sendDataFunc, testFormData, randomNumber
 
   return (
     <div className="flex flex-col">
-      <div className="w-[400px] h-[400px] border-[3px] p-2 flex text-left items-center justify-between text-white">
+      <div className="w-[400px] h-[400px] border-[3px] p-2 flex text-left items-center justify-between text-black bg-white">
         <div>
         {isLoading &&   <div> USSD loading</div>}
-        <p>{lines.map((line, index) => (
+        {!isLoading && <p>{lines.map((line, index) => (
         // Use <p> for each line or <br> between lines
         <React.Fragment key={index}>
           {line}
           {index < lines.length - 1 && <br />} {/* Add <br> except for the last line */}
         </React.Fragment>
-      ))}</p>
+      ))}</p>}
         </div>
       </div>
       <div className="flex flex-col p-4 w-auto justify-between">
